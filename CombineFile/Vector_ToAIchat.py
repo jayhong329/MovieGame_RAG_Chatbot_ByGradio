@@ -24,7 +24,7 @@ model_name = 'sentence-transformers/multi-qa-distilbert-cos-v1'
 
 model = SentenceTransformer(model_name)
 
-MOVIES_EXCEL = './tmdb_top_rated_movies_total.xlsx'
+MOVIES_EXCEL = './dataMovie_clean.xlsx'
 GAMES_EXCEL = './game_data(1980~2017).xlsx'
 MOVIES_INDEX_PATH = './movies_excel_vector.index'
 GAMES_INDEX_PATH = './games_excel_vector.index'

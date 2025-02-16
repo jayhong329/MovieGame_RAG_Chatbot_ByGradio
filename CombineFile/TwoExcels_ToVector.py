@@ -11,11 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 全局設置
-MODEL_NAME = 'sentence-transformers/multi-qa-distilbert-cos-v1'
-# MODEL_NAME = 'sentence-transformers/multi-qa-MiniLM-L6-cos-v1'
-# MODEL_NAME = 'sentence-transformers/distiluse-base-multilingual-cased-v1'
+MODEL_NAME = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
 
-MOVIES_EXCEL = './tmdb_top_rated_movies_total.xlsx'
+MOVIES_EXCEL = './dataMovie_clean.xlsx'
 GAMES_EXCEL = './game_data(1980~2017).xlsx'
 MOVIES_INDEX_PATH = './movies_excel_vector.index'
 GAMES_INDEX_PATH = './games_excel_vector.index'
@@ -61,17 +59,17 @@ def create_vector_index_from_excel(data, is_movie=True):
         print(f"載入 {MODEL_NAME} 模型中...")
         model = SentenceTransformer(MODEL_NAME)
 
-        # 根據數據類型生成嵌入向量
+        # 根據電影/遊戲"簡述"生成嵌入向量
         if is_movie:
             combined_texts = [
-                f"{row['movie_title']} - {row['movie_description']} - {row['movie_genre']}"
+                f"{row['movie_description']}"
                 for _, row in data.iterrows()
             ]
             index_path = MOVIES_INDEX_PATH
             ids_path = MOVIES_IDS_PATH
         else:
             combined_texts = [
-                f"{row['game_title']} - {row['game_description']} - {row['game_genre']}"
+                f"{row['game_description']}"
                 for _, row in data.iterrows()
             ]
             index_path = GAMES_INDEX_PATH
@@ -82,13 +80,15 @@ def create_vector_index_from_excel(data, is_movie=True):
             combined_texts,
             batch_size=16,
             show_progress_bar=True,
-            normalize_embeddings=True
+            # normalize_embeddings=True
         )
+
+        embeddings = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)  # 正規化
 
         # 創建 FAISS 索引
         print("創建 FAISS 索引...")
         dimension = embeddings.shape[1]
-        index = faiss.IndexFlatL2(dimension)
+        index = faiss.IndexFlatIP(dimension)
         index = faiss.IndexIDMap(index)
 
         # 添加向量到索引
@@ -102,14 +102,28 @@ def create_vector_index_from_excel(data, is_movie=True):
         # 保存 ID 映射
         print("保存 ID 映射...")
         if is_movie:
-            ids_dict = {row['id']: row['movie_title'] for _, row in data.iterrows()}
+            ids_dict = {
+                row['id']: {
+                    'title': row['movie_title'],
+                    'genre': row['movie_genre'],
+                    'type': 'movie'
+                }
+                for _, row in data.iterrows()
+            }
         else:
-            ids_dict = {row['id']: row['game_title'] for _, row in data.iterrows()}
+            ids_dict = {
+                row['id']: {
+                    'title': row['game_title'],
+                    'genre': row['game_genre'],
+                    'type': 'game'
+                }
+                for _, row in data.iterrows()
+            }
             
         with open(ids_path, 'wb') as f:
             pickle.dump(ids_dict, f)
 
-        print("向量索引創建成功")
+        print("成功")
     except Exception as e:
         print(f"創建向量索引時發生錯誤：{str(e)}")
         raise e
