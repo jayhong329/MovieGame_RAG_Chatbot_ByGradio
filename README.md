@@ -26,5 +26,9 @@ Gradio ChatBot - with OpenAI_API
 * 三. CombineFile - 使用 Movies & Games 兩份檔案，創建向量索引，透過 Hybrid_search ( FuzzyWuzzy + BM25 + FAISS) ，構建 Gradio_ChatBot
 
 ### 成果
+- 執行過程的擷圖
 ![chatbot2](https://github.com/user-attachments/assets/5af6d7ca-1a27-4464-9eeb-46aba74829a9)
 ![chatbot1](https://github.com/user-attachments/assets/e67f1324-2e1c-42a1-9a56-0035a6e6e837)
+- [電影遊戲Chatbot]
+https://github.com/user-attachments/assets/059af710-ca49-49f5-8a55-fc895319c9b0
+
