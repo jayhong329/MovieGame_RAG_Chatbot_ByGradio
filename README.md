@@ -17,7 +17,6 @@ Gradio ChatBot - with OpenAI_API
 - pickleshare     0.7.5
 - openai          1.64.0
 - sentence-transformers   3.1.1
-...
 
 ### 說明
 - 使用 Semantic Similarity Models - paraphrase-multilingual-MiniLM-L12-v2  (主要用來創建向量索引並保存 ID 映射)
