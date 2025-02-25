@@ -3,23 +3,21 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 import os
-import pymysql
 import pickle
-from dotenv import load_dotenv
 
-# 載入環境變數
-load_dotenv()
+# 取得當前工作目錄 (cwd)
+cwd = os.getcwd()
 
 # 全局設置
 MODEL_NAME = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
 
-MOVIES_EXCEL = './dataMovie_clean.xlsx'
-GAMES_EXCEL = './game_data(1980~2017).xlsx'
-MOVIES_INDEX_PATH = './movies_excel_vector.index'
-GAMES_INDEX_PATH = './games_excel_vector.index'
-MOVIES_IDS_PATH = './movies_excel_ids.pkl'
-GAMES_IDS_PATH = './games_excel_ids.pkl'
-
+# 檔案路徑
+MOVIES_EXCEL = os.path.join(cwd, "original_data/dataMovie.xlsx")
+GAMES_EXCEL = os.path.join(cwd, "original_data/dataGame.xlsx")
+MOVIES_INDEX_PATH = os.path.join(cwd, "vector_data/movies_excel_vector.index")
+GAMES_INDEX_PATH = os.path.join(cwd, "vector_data/games_excel_vector.index")
+MOVIES_IDS_PATH = os.path.join(cwd, "vector_data/movies_excel_ids.pkl")
+GAMES_IDS_PATH = os.path.join(cwd, "vector_data/games_excel_ids.pkl")
 
 def read_excel_data(file_path, is_movie=True):
     """從 Excel 文件讀取數據"""
@@ -123,7 +121,7 @@ def create_vector_index_from_excel(data, is_movie=True):
         with open(ids_path, 'wb') as f:
             pickle.dump(ids_dict, f)
 
-        print("成功")
+        print("向量索引創建成功")
     except Exception as e:
         print(f"創建向量索引時發生錯誤：{str(e)}")
         raise e
