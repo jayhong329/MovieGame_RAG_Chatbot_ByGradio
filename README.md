@@ -19,7 +19,9 @@ Gradio ChatBot - with OpenAI_API
 - sentence-transformers   3.1.1
 
 ### 說明
-- 使用 Semantic Similarity Models - paraphrase-multilingual-MiniLM-L12-v2  (主要用來創建向量索引並保存 ID 映射)
+- 使用 Sentence-BERT - paraphrase-multilingual-MiniLM-L12-v2  (用來創建向量索引  保存 ID 映射)
+- 查詢前處理 (結巴斷詞) + FuzzyWuzzy 進行模糊比對 + BM25 + One-Hot Encoding 類型檢索 + FAISS + Sentence-BERT 語義檢索
+
 - 總共分以下三個檔案夾:
 * 一. TMDB_SQL_Vector_Chatbot - 透過 TMDB Api 抓取資料，存入 SQL 內，生成向量索引，使用餘弦相似度 cosine similarity ，構建 Gradio_ChatBot
 * 二. TMDB_Excel_Vector_Chatbot - 透過 TMDB Api 抓取資料，存成 EXCEL ，生成向量索引，使用餘弦相似度 cosine similarity ，構建 Gradio_ChatBot
