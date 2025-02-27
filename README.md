@@ -1,4 +1,4 @@
-Gradio ChatBot - with OpenAI_API
+Movie&Game ChatBot - with OpenAI_API By Gradio
 ---
 
 ### 訓練資料來源
